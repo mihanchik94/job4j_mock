@@ -3,7 +3,6 @@ package ru.job4j.site.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,9 +12,7 @@ import ru.job4j.site.service.*;
 
 import javax.servlet.http.HttpServletRequest;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static ru.job4j.site.controller.RequestResponseTools.getToken;
@@ -29,6 +26,7 @@ public class IndexController {
     private final AuthService authService;
     private final NotificationService notifications;
     private final ProfilesService profilesService;
+    private final TopicsService topicsService;
 
     @GetMapping({"/", "index"})
     public String getIndexPage(Model model, HttpServletRequest req) throws JsonProcessingException {
@@ -51,8 +49,14 @@ public class IndexController {
                 .map(interviewDTO -> profilesService.getProfileById(interviewDTO.getSubmitterId()))
                 .map(Optional::get)
                 .collect(Collectors.toSet());
+        Map<Integer, Integer> interviewsCount = new HashMap<>();
+        for (InterviewDTO interviewDTO : interviewDTOs) {
+            int key = topicsService.getById(interviewDTO.getTopicId()).getCategory().getId();
+            interviewsCount.put(key, interviewsCount.get(key) == null ? 1 : interviewsCount.get(key) + 1);
+        }
         model.addAttribute("new_interviews", interviewDTOs);
         model.addAttribute("profiles", profiles);
+        model.addAttribute("interviewsCount", interviewsCount);
         return "index";
     }
 }

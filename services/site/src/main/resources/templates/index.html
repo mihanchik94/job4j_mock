@@ -109,7 +109,10 @@
                                 </small>
                             </td>
                             <td>
-                                <span class="badge bg-success">Новых: 100</span>
+                                <span class="badge bg-success"
+                                      th:text="${interviewsCount.get(category.getId()) == null ? 'Новых: 0'
+                                      : 'Новых: ' + interviewsCount.get(category.getId())}">
+                                </span>
                             </td>
                         </tr>
                         </tbody>

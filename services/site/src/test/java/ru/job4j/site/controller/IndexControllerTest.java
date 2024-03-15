@@ -19,6 +19,7 @@ import ru.job4j.site.dto.TopicDTO;
 import ru.job4j.site.service.*;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
 
@@ -62,7 +63,7 @@ class IndexControllerTest {
     @BeforeEach
     void initTest() {
         this.indexController = new IndexController(
-                categoriesService, interviewsService, authService, notificationService, profilesService
+                categoriesService, interviewsService, authService, notificationService, profilesService, topicsService
         );
     }
 
@@ -84,6 +85,8 @@ class IndexControllerTest {
         topicDTO2.setName("topic2");
         var cat1 = new CategoryDTO(1, "name1");
         var cat2 = new CategoryDTO(2, "name2");
+        topicDTO1.setCategory(cat1);
+        topicDTO2.setCategory(cat2);
         var listCat = List.of(cat1, cat2);
         var firstInterview = new InterviewDTO(1, 1, 1, 1,
                 "interview1", "description1", "contact1",
@@ -92,11 +95,14 @@ class IndexControllerTest {
                 "interview2", "description2", "contact2",
                 "30.02.2024", "09.10.2023", 1);
         var listInterviews = List.of(firstInterview, secondInterview);
+        Map<Integer, Integer> interviewsCount = Map.of(cat1.getId(), 2);
         when(topicsService.getByCategory(cat1.getId())).thenReturn(List.of(topicDTO1));
         when(topicsService.getByCategory(cat2.getId())).thenReturn(List.of(topicDTO2));
         when(categoriesService.getMostPopular()).thenReturn(listCat);
         when(interviewsService.getByType(1)).thenReturn(listInterviews);
         when(profilesService.getProfileById(anyInt())).thenReturn(Optional.of(new ProfileDTO()));
+        when(topicsService.getById(1)).thenReturn(topicDTO1);
+        when(topicsService.getById(2)).thenReturn(topicDTO2);
         var listBread = List.of(new Breadcrumb("Главная", "/"));
         var model = new ConcurrentModel();
         var view = indexController.getIndexPage(model, null);
@@ -104,11 +110,13 @@ class IndexControllerTest {
         var actualBreadCrumbs = model.getAttribute("breadcrumbs");
         var actualUserInfo = model.getAttribute("userInfo");
         var actualInterviews = model.getAttribute("new_interviews");
+        Object actualInterviewsCounter = model.getAttribute("interviewsCount");
 
         assertThat(view).isEqualTo("index");
         assertThat(actualCategories).usingRecursiveComparison().isEqualTo(listCat);
         assertThat(actualBreadCrumbs).usingRecursiveComparison().isEqualTo(listBread);
         assertThat(actualUserInfo).isNull();
         assertThat(actualInterviews).usingRecursiveComparison().isEqualTo(listInterviews);
+        assertThat(actualInterviewsCounter).isEqualTo(interviewsCount);
     }
 }
