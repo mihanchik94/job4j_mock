@@ -62,7 +62,7 @@ public class RegAction implements Action {
 
         var password = tgConfig.getPassword();
         var person = new PersonDTO(email, password, true, null,
-                Calendar.getInstance());
+                Calendar.getInstance(), 1L);
         Object result;
         try {
             result = authCallWebClint.doPost(URL_AUTH_REGISTRATION, person).block();

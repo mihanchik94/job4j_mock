@@ -20,5 +20,5 @@ public class PersonDTO {
     private boolean privacy;
     private List<RoleDTO> roles;
     private Calendar created;
-
+    private Long chatId;
 }

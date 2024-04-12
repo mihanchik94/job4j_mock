@@ -76,6 +76,8 @@ public class Profile {
 
     private Calendar created;
 
+    private Long chatId;
+
     public Profile() {
     }
 
@@ -263,6 +265,14 @@ public class Profile {
 
     public void setCreated(Calendar created) {
         this.created = created;
+    }
+
+    public Long getChatId() {
+        return chatId;
+    }
+
+    public void setChatId(Long chatId) {
+        this.chatId = chatId;
     }
 
     @Override
