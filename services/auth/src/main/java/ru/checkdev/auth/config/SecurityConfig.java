@@ -36,6 +36,7 @@ public class SecurityConfig {
                 "/person/by/email",
                 "/img",
                 "/person/profile",
+                "/person/check/**",
                 "/template/queue",
                 "/template/ping",
                 "/profiles/**",

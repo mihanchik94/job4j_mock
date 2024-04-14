@@ -50,6 +50,7 @@ public class RegAction implements Action {
     public BotApiMethod<Message> callback(Message message) {
         var chatId = message.getChatId().toString();
         var email = message.getText();
+        String username = message.getFrom().getFirstName() + " " + message.getFrom().getLastName();
         var text = "";
         var sl = System.lineSeparator();
 
@@ -61,8 +62,8 @@ public class RegAction implements Action {
         }
 
         var password = tgConfig.getPassword();
-        var person = new PersonDTO(email, password, true, null,
-                Calendar.getInstance(), 1L);
+        var person = new PersonDTO(email, username, password, true, null,
+                Calendar.getInstance(), message.getChatId());
         Object result;
         try {
             result = authCallWebClint.doPost(URL_AUTH_REGISTRATION, person).block();

@@ -3,6 +3,7 @@ package ru.checkdev.auth.domain;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.password.StandardPasswordEncoder;
 
 import javax.persistence.*;
@@ -14,6 +15,7 @@ import java.util.List;
  * @since 25.09.2016
  */
 @Entity(name = "profile")
+@AllArgsConstructor
 public class Profile {
     @Transient
     private final StandardPasswordEncoder encoding = new StandardPasswordEncoder();
@@ -27,6 +29,7 @@ public class Profile {
     @Column(unique = true)
     private String email;
 
+    @Column(name = "key_name")
     private String key;
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)

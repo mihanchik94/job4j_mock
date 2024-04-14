@@ -11,6 +11,7 @@ import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.checkdev.auth.domain.Profile;
+import ru.checkdev.auth.dto.PersonDTO;
 import ru.checkdev.auth.service.PersonService;
 import ru.checkdev.auth.service.RoleService;
 
@@ -146,5 +147,16 @@ public class PersonController {
         map.put("personsShowed", persons.findByShow(true, PageRequest.of(pageToShow, limit)));
         map.put("getTotal", persons.showed());
         return new ResponseEntity<>(map, HttpStatus.OK);
+    }
+
+    @GetMapping("/check/{chatId}")
+    public ResponseEntity<PersonDTO> findPersonByChatId(@PathVariable Long chatId) {
+        Optional<PersonDTO> profile  = persons.findByChatId(chatId);
+        PersonDTO personDTO = new PersonDTO();
+        if (profile.isPresent()) {
+            personDTO.setUsername(profile.get().getUsername());
+            personDTO.setEmail(profile.get().getEmail());
+        }
+        return new ResponseEntity<>(personDTO, HttpStatus.OK);
     }
 }
