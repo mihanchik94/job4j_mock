@@ -50,7 +50,10 @@ public class RegAction implements Action {
     public BotApiMethod<Message> callback(Message message) {
         var chatId = message.getChatId().toString();
         var email = message.getText();
-        String username = message.getFrom().getFirstName() + " " + message.getFrom().getLastName();
+        String username = message.getFrom().getFirstName();
+        if (message.getFrom().getLastName() != null) {
+            username = username + " " + message.getFrom().getLastName();
+        }
         var text = "";
         var sl = System.lineSeparator();
 

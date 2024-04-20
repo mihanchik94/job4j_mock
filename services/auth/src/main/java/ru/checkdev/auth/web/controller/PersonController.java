@@ -149,7 +149,7 @@ public class PersonController {
         return new ResponseEntity<>(map, HttpStatus.OK);
     }
 
-    @GetMapping("/check/{chatId}")
+    @GetMapping(value = "/check/{chatId}")
     public ResponseEntity<PersonDTO> findPersonByChatId(@PathVariable Long chatId) {
         Optional<PersonDTO> profile  = persons.findByChatId(chatId);
         PersonDTO personDTO = new PersonDTO();
@@ -158,5 +158,15 @@ public class PersonController {
             personDTO.setEmail(profile.get().getEmail());
         }
         return new ResponseEntity<>(personDTO, HttpStatus.OK);
+    }
+
+    @PutMapping(value = "/forget")
+    public ResponseEntity<String> updatePassword(@RequestBody Long chatId) {
+        Optional<String> optionalPassword = persons.updatePasswordByChatId(chatId);
+        String password = "";
+        if (optionalPassword.isPresent()) {
+            password = optionalPassword.get();
+        }
+        return new ResponseEntity<>(password, HttpStatus.OK);
     }
 }

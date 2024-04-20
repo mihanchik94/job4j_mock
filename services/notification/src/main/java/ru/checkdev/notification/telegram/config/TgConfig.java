@@ -55,4 +55,13 @@ public class TgConfig {
     public Map<String, String> getObjectToMap(Object object) {
         return MAPPER.convertValue(object, Map.class);
     }
+
+    /**
+     * Метод преобразовывает Object в String
+     * @param object Object
+     * @return String
+     */
+    public String convertObjectToString(Object object) {
+        return MAPPER.convertValue(object, String.class);
+    }
 }

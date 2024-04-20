@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
+import org.springframework.transaction.annotation.Transactional;
 import ru.checkdev.auth.domain.Profile;
 import ru.checkdev.auth.domain.Photo;
 import ru.checkdev.auth.dto.PersonDTO;
@@ -82,4 +83,15 @@ public interface PersonRepository extends CrudRepository<Profile, Integer> {
      */
     @Query("select new ru.checkdev.auth.dto.PersonDTO(p.email, p.username, p.password, p.privacy, p.created, p.chatId) from profile  p where p.chatId = :chatId")
     PersonDTO findProfileByChatId(@Param("chatId") long chatId);
+
+    /**
+     * Метод нативным запросом меняет пароль
+     * @param password - новый пароль пользователя
+     * @param chatId - chatId пользователя
+     * @return количество обновленных строк
+     */
+    @Transactional
+    @Modifying
+    @Query("update profile p set p.password = :password where p.chatId = :chatId")
+    int updatePassword(@Param("password") String password, @Param("chatId") long chatId);
 }

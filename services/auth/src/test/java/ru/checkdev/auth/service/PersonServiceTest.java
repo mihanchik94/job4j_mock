@@ -61,4 +61,10 @@ public class PersonServiceTest {
         Optional<PersonDTO> personDTO = service.findByChatId(12L);
         assertThat(personDTO, is(Optional.empty()));
     }
+
+    @Test
+    public void whenUpdatePasswordByChatIdThenGetEmptyOptional() {
+        Optional<String> passwordOptional = service.updatePasswordByChatId(12L);
+        assertThat(passwordOptional, is(Optional.empty()));
+    }
 }

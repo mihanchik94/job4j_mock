@@ -7,10 +7,7 @@ import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
-import ru.checkdev.notification.telegram.action.Action;
-import ru.checkdev.notification.telegram.action.CheckAction;
-import ru.checkdev.notification.telegram.action.InfoAction;
-import ru.checkdev.notification.telegram.action.RegAction;
+import ru.checkdev.notification.telegram.action.*;
 import ru.checkdev.notification.telegram.service.TgAuthCallWebClint;
 
 import java.util.List;
@@ -42,11 +39,14 @@ public class TgRun {
 
     @Bean
     public void initTg() {
+        List<String> commandsForActions = getCommandsForActions();
         Map<String, Action> actionMap = Map.of(
                 "/start", new InfoAction(List.of(
-                        "/start", "/new", "/check")),
+                        "/start", "/new", "/check", "/forget")),
                 "/new", new RegAction(tgAuthCallWebClint, urlSiteAuth),
-                "/check", new CheckAction(tgAuthCallWebClint)
+                "/check", new CheckAction(tgAuthCallWebClint),
+                "/forget", new ForgetAction(tgAuthCallWebClint),
+                "unknown", new UnknownAction(commandsForActions)
         );
         try {
             BotMenu menu = new BotMenu(actionMap, username, token);
@@ -56,5 +56,9 @@ public class TgRun {
         } catch (TelegramApiException e) {
             log.error("Telegram bot: {}, ERROR {}", username, e.getMessage());
         }
+    }
+
+    private List<String> getCommandsForActions() {
+        return List.of("/start", "/new", "/check", "/forget");
     }
 }
