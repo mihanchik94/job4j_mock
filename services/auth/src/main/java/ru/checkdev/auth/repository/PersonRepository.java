@@ -81,7 +81,7 @@ public interface PersonRepository extends CrudRepository<Profile, Integer> {
      * @param chatId - long chatId
      * @return PersonDTO
      */
-    @Query("select new ru.checkdev.auth.dto.PersonDTO(p.email, p.username, p.password, p.privacy, p.created, p.chatId) from profile  p where p.chatId = :chatId")
+    @Query("select new ru.checkdev.auth.dto.PersonDTO(p.id, p.email, p.username, p.password, p.privacy, p.created, p.chatId) from profile  p where p.chatId = :chatId")
     PersonDTO findProfileByChatId(@Param("chatId") long chatId);
 
     /**

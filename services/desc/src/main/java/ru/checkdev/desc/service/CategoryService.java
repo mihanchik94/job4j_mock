@@ -6,8 +6,6 @@ import org.springframework.stereotype.Service;
 import ru.checkdev.desc.domain.Category;
 import ru.checkdev.desc.repository.CategoryRepository;
 import ru.checkdev.desc.utility.Utility;
-
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,18 +22,16 @@ public class CategoryService {
         categoryRepository.deleteById(categoryId);
     }
 
+    public List<Category> getAll() {
+        return categoryRepository.findAllByOrderByPositionAsc();
+    }
+
     public Category create(Category category) {
         return categoryRepository.save(category);
     }
 
     public void update(Category category) {
         categoryRepository.save(category);
-    }
-
-    public List<Category> getAll() {
-        var list = new ArrayList<Category>();
-        categoryRepository.findAllByOrderByPositionAsc().forEach(list::add);
-        return list;
     }
 
     public List<Category> getMostPopular() {

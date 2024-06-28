@@ -10,6 +10,7 @@ import java.util.Calendar;
 @AllArgsConstructor
 @NoArgsConstructor
 public class PersonDTO {
+    private int id;
     private String email;
     private String username;
     private String password;

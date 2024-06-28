@@ -12,7 +12,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import ru.checkdev.notification.NtfSrv;
 import ru.checkdev.notification.domain.SubscribeTopic;
-import ru.checkdev.notification.service.SubscribeTopicService;
+import ru.checkdev.notification.service.subscribe.SubscribeTopicService;
 import ru.checkdev.notification.telegram.TgRun;
 import ru.checkdev.notification.telegram.service.TgAuthCallWebClint;
 import java.util.List;

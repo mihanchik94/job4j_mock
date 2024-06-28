@@ -5,7 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.checkdev.notification.domain.SubscribeTopic;
-import ru.checkdev.notification.service.SubscribeTopicService;
+import ru.checkdev.notification.service.subscribe.SubscribeTopicService;
 import java.util.List;
 
 @RestController

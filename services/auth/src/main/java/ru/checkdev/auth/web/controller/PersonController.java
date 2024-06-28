@@ -1,5 +1,6 @@
 package ru.checkdev.auth.web.controller;
 
+import org.apache.tomcat.util.buf.UEncoder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -154,6 +155,7 @@ public class PersonController {
         Optional<PersonDTO> profile  = persons.findByChatId(chatId);
         PersonDTO personDTO = new PersonDTO();
         if (profile.isPresent()) {
+            personDTO.setId(profile.get().getId());
             personDTO.setUsername(profile.get().getUsername());
             personDTO.setEmail(profile.get().getEmail());
         }
