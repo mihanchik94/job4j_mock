@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class TopicDTO {
-
     private int id;
     private String name;
+    private int categoryId;
 }

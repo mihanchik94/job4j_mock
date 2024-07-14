@@ -1,7 +1,8 @@
-package ru.checkdev.notification.service;
+package ru.checkdev.notification.service.subscribe;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.checkdev.notification.domain.SubscribeCategory;
 import ru.checkdev.notification.repository.SubscribeCategoryRepository;
 
@@ -35,5 +36,24 @@ public class SubscribeCategoryService {
                 .findByUserIdAndCategoryId(subscribeCategory.getUserId(), subscribeCategory.getCategoryId());
         repository.delete(subscribeCategoryRsl);
         return subscribeCategory;
+    }
+
+    public boolean existByUserId(int userId) {
+        return repository.existByUserId(userId);
+    }
+
+    @Transactional
+    public void deleteByUserId(int userId) {
+        repository.deleteByUserId(userId);
+    }
+
+    public void saveAll(int userId, List<Integer> categoryIds) {
+        List<SubscribeCategory> subscribeCategories = categoryIds.stream()
+                .map(categoryId -> SubscribeCategory.builder()
+                        .userId(userId)
+                        .categoryId(categoryId)
+                        .build())
+                .toList();
+        repository.saveAll(subscribeCategories);
     }
 }

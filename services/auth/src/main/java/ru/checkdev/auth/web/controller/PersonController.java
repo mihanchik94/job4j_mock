@@ -1,5 +1,6 @@
 package ru.checkdev.auth.web.controller;
 
+import org.apache.tomcat.util.buf.UEncoder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -11,6 +12,7 @@ import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.checkdev.auth.domain.Profile;
+import ru.checkdev.auth.dto.PersonDTO;
 import ru.checkdev.auth.service.PersonService;
 import ru.checkdev.auth.service.RoleService;
 
@@ -146,5 +148,27 @@ public class PersonController {
         map.put("personsShowed", persons.findByShow(true, PageRequest.of(pageToShow, limit)));
         map.put("getTotal", persons.showed());
         return new ResponseEntity<>(map, HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/check/{chatId}")
+    public ResponseEntity<PersonDTO> findPersonByChatId(@PathVariable Long chatId) {
+        Optional<PersonDTO> profile  = persons.findByChatId(chatId);
+        PersonDTO personDTO = new PersonDTO();
+        if (profile.isPresent()) {
+            personDTO.setId(profile.get().getId());
+            personDTO.setUsername(profile.get().getUsername());
+            personDTO.setEmail(profile.get().getEmail());
+        }
+        return new ResponseEntity<>(personDTO, HttpStatus.OK);
+    }
+
+    @PutMapping(value = "/forget")
+    public ResponseEntity<String> updatePassword(@RequestBody Long chatId) {
+        Optional<String> optionalPassword = persons.updatePasswordByChatId(chatId);
+        String password = "";
+        if (optionalPassword.isPresent()) {
+            password = optionalPassword.get();
+        }
+        return new ResponseEntity<>(password, HttpStatus.OK);
     }
 }

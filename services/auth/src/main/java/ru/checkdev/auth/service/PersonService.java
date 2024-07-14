@@ -25,6 +25,7 @@ import ru.checkdev.auth.domain.Notify;
 import ru.checkdev.auth.domain.Profile;
 import ru.checkdev.auth.domain.Photo;
 import ru.checkdev.auth.domain.Role;
+import ru.checkdev.auth.dto.PersonDTO;
 import ru.checkdev.auth.repository.PersonRepository;
 
 import javax.imageio.IIOImage;
@@ -309,5 +310,37 @@ public class PersonService {
         }
         emptyNames.addAll(Arrays.asList(extra));
         return emptyNames;
+    }
+
+
+    /**
+     * Получаем PersonDTO по chatId
+     * @param chatId - chatId пользователя
+     * @return PersonDTO
+     */
+    public Optional<PersonDTO> findByChatId(long chatId) {
+        final Optional<PersonDTO> result;
+        PersonDTO personDTO = persons.findProfileByChatId(chatId);
+        if (personDTO == null) {
+            result = Optional.empty();
+        } else {
+            result = Optional.of(personDTO);
+        }
+        return result;
+    }
+
+    /**
+     * Обновляем пароль пользователю по chatId
+     * @param chatId chatId пользователя
+     * @return новый пароль, если пользователь найден, если не найден - Optional.empty
+     */
+    public Optional<String> updatePasswordByChatId(long chatId) {
+        String newPassword = RandomStringUtils.randomAlphabetic(8);
+        String encryptedNewPassword = encoding.encode(newPassword);
+        int resultOfUpdating = persons.updatePassword(encryptedNewPassword, chatId);
+        if (resultOfUpdating == 0) {
+            return Optional.empty();
+        }
+        return Optional.of(newPassword);
     }
 }

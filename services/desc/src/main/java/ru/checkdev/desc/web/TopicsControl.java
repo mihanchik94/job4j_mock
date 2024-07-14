@@ -28,10 +28,4 @@ public class TopicsControl {
     public List<Topic> getByCategory(@PathVariable int id) {
         return topicService.findByCategory(id);
     }
-
-    @GetMapping("/getByCategoryId/{categoryId}")
-    public ResponseEntity<List<TopicDTO>> getByCategoryId(@PathVariable int categoryId) {
-        return new ResponseEntity<>(topicService
-                .getTopicDTOsByCategoryId(categoryId), HttpStatus.OK);
-    }
 }

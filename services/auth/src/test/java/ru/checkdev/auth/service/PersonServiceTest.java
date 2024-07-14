@@ -7,8 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import ru.checkdev.auth.domain.Profile;
+import ru.checkdev.auth.dto.PersonDTO;
 import ru.checkdev.auth.repository.PersonRepository;
 
+import java.util.Calendar;
 import java.util.List;
 import java.util.Optional;
 
@@ -41,7 +43,10 @@ public class PersonServiceTest {
     @Test
     public void whenRegPersonRolesThenDropRoles() {
         Profile profile = new Profile("Петр Арсентьев", "parsentev@yandex.ru", "password");
+        Calendar calendar = Calendar.getInstance();
         profile.setKey("test");
+        profile.setUpdated(calendar);
+        profile.setCreated(calendar);
         this.persons.save(profile);
     }
 
@@ -49,5 +54,17 @@ public class PersonServiceTest {
     public void whenSelectAllPersonsThenListContainTestRecord() {
         List<Profile> profileList = this.service.getAll();
         assertTrue(profileList.size() > 0);
+    }
+
+    @Test
+    public void whenFindByChatIdThenReturnEmptyOptional() {
+        Optional<PersonDTO> personDTO = service.findByChatId(12L);
+        assertThat(personDTO, is(Optional.empty()));
+    }
+
+    @Test
+    public void whenUpdatePasswordByChatIdThenGetEmptyOptional() {
+        Optional<String> passwordOptional = service.updatePasswordByChatId(12L);
+        assertThat(passwordOptional, is(Optional.empty()));
     }
 }

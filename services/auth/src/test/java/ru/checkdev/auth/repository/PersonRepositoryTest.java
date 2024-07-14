@@ -6,6 +6,8 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.junit4.SpringRunner;
+import ru.checkdev.auth.domain.Profile;
+import ru.checkdev.auth.dto.PersonDTO;
 import ru.checkdev.auth.dto.ProfileDTO;
 
 import javax.persistence.EntityManager;
@@ -31,7 +33,7 @@ public class PersonRepositoryTest {
 
     @Before
     public void clearTable() {
-        entityManager.createQuery("delete from person").executeUpdate();
+        entityManager.createQuery("delete from profile").executeUpdate();
     }
 
     @Test
@@ -50,5 +52,11 @@ public class PersonRepositoryTest {
     public void whenFindProfileOrderByCreatedDescThenReturnEmptyList() {
         var listProfileDTO = personRepository.findProfileOrderByCreatedDesc();
         assertThat(listProfileDTO, is(Collections.emptyList()));
+    }
+
+    @Test
+    public void whenFindProfileByChatIdThenReturnNull() {
+        PersonDTO profile = personRepository.findProfileByChatId(-1L);
+        assertNull(profile);
     }
 }

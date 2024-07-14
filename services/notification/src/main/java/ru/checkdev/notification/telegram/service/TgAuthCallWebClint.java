@@ -2,6 +2,7 @@ package ru.checkdev.notification.telegram.service;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
@@ -52,6 +53,23 @@ public class TgAuthCallWebClint {
                 .bodyValue(personDTO)
                 .retrieve()
                 .bodyToMono(Object.class)
+                .doOnError(err -> log.error("API not found: {}", err.getMessage()));
+    }
+
+    /**
+     * Метод PUT
+     * @param url URL http
+     * @param chatId chatId пользователя
+     * @return Mono
+     */
+    public Mono<String> doPut(String url, Long chatId) {
+        return webClient
+                .put()
+                .uri(url)
+                .bodyValue(chatId)
+                .accept(MediaType.APPLICATION_JSON)
+                .retrieve()
+                .bodyToMono(String.class)
                 .doOnError(err -> log.error("API not found: {}", err.getMessage()));
     }
 

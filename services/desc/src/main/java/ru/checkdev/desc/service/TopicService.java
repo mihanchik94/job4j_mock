@@ -1,9 +1,10 @@
 package ru.checkdev.desc.service;
 
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.checkdev.desc.domain.Topic;
 import ru.checkdev.desc.dto.TopicDTO;
+import ru.checkdev.desc.mapper.topic.TopicMapper;
 import ru.checkdev.desc.repository.TopicRepository;
 
 import java.util.ArrayList;
@@ -12,9 +13,10 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class TopicService {
     private final TopicRepository topicRepository;
+    private final TopicMapper topicMapper;
 
     public Optional<Topic> findById(int topicId) {
         return topicRepository.findById(topicId);
@@ -46,7 +48,7 @@ public class TopicService {
     }
 
     public List<Topic> getAll() {
-        return new ArrayList<>(topicRepository.findAllByOrderByPositionAsc());
+        return topicRepository.findAllByOrderByPositionAsc();
     }
 
     public void incrementTotal(int id) {
@@ -57,12 +59,7 @@ public class TopicService {
         return topicRepository.getNameById(id);
     }
 
-    public List<TopicDTO> getTopicDTOsByCategoryId(int categoryId) {
-        List<TopicDTO> result = new ArrayList<>();
-        var topics = topicRepository.findByCategoryIdOrderByPositionAsc(categoryId);
-        for (var topic : topics) {
-            result.add(new TopicDTO(topic.getId(), topic.getName()));
-        }
-        return result;
+    public List<TopicDTO> getAllTopicDTOs() {
+        return topicMapper.toDTOList(getAll());
     }
 }

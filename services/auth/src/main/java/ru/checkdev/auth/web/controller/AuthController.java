@@ -60,7 +60,7 @@ public class AuthController {
             }
         }).orElseGet(() -> new Object() {
             public String getError() {
-                return String.format("Пользователь с почтой %s уже существует.", profile.getEmail());
+                return "Пользователь уже зарегистрирован";
             }
         });
     }
