@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class SubscribeTopicDTO {
+public class SubscribeTopic {
     private int userId;
     private int topicId;
 }
