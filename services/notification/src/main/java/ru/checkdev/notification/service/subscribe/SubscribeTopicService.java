@@ -1,6 +1,7 @@
 package ru.checkdev.notification.service.subscribe;
 
 import lombok.AllArgsConstructor;
+import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.retry.annotation.Backoff;
 import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
@@ -26,6 +27,7 @@ public class SubscribeTopicService {
         return repository.findAll();
     }
 
+    @KafkaListener(topics = "add-subscribeTopicTopic")
     public SubscribeTopic save(SubscribeTopic subscribeTopic) {
         return repository.save(subscribeTopic);
     }
@@ -36,6 +38,7 @@ public class SubscribeTopicService {
                 .collect(Collectors.toList());
     }
 
+    @KafkaListener(topics = "delete-subscribeTopicTopic")
     public SubscribeTopic delete(SubscribeTopic subscribeTopic) {
         SubscribeTopic rsl = repository
                 .findByUserIdAndTopicId(subscribeTopic.getUserId(), subscribeTopic.getTopicId());

@@ -1,6 +1,7 @@
 package ru.checkdev.notification.service.subscribe;
 
 import lombok.AllArgsConstructor;
+import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.checkdev.notification.domain.SubscribeCategory;
@@ -18,6 +19,7 @@ public class SubscribeCategoryService {
         return repository.findAll();
     }
 
+    @KafkaListener(topics = "add-subscribeCategoryTopic")
     public SubscribeCategory save(SubscribeCategory subscribeCategory) {
         return repository.save(subscribeCategory);
     }
@@ -31,6 +33,7 @@ public class SubscribeCategoryService {
         return rsl;
     }
 
+    @KafkaListener(topics = "delete-subscribeCategoryTopic")
     public SubscribeCategory delete(SubscribeCategory subscribeCategory) {
         SubscribeCategory subscribeCategoryRsl = repository
                 .findByUserIdAndCategoryId(subscribeCategory.getUserId(), subscribeCategory.getCategoryId());
