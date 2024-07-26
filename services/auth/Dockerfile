@@ -1,13 +1,11 @@
-FROM maven:3.6.3-openjdk-17
+# сборка проекта в jar
+FROM maven:3.6.3-openjdk-17 as maven
+WORKDIR /auth
+COPY . /auth
+RUN mvn install
 
-RUN mkdir auth
-
-WORKDIR auth
-
-COPY . .
-
-RUN mvn package -Dmaven.test.skip=true
-
-CMD ["mvn", "liquibase:update", "-Pdocker"]
-
-CMD ["java", "-jar", "target/auth-1.0.0.jar"]
+# указание, как запустить проект
+FROM openjdk:17.0.2-jdk
+WORKDIR /auth
+COPY --from=maven /auth/target/auth-1.0.0.jar auth.jar
+CMD java -jar auth.jar
